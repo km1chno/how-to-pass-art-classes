@@ -3,5 +3,4 @@
 
 int main() {
     std::cout << "start";
-
 }
