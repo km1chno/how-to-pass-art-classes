@@ -1,0 +1,8 @@
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/CMakeFiles/how_to_pass_art_classes.dir
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/CMakeFiles/edit_cache.dir
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/CMakeFiles/rebuild_cache.dir
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/images/CMakeFiles/images_helper.dir
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/images/CMakeFiles/edit_cache.dir
+/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/images/CMakeFiles/rebuild_cache.dir

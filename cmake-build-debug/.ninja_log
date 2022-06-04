@@ -1,0 +1,26 @@
+# ninja log v5
+1	8548	1654353489364372481	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+1	8554	1654353489370372483	src/images/CMakeFiles/images_helper.dir/imagesHelper.cpp.o	123d9d3f9f120bdf
+0	34	1654353528743385414	build.ninja	bf620b232ae9dea2
+8554	8987	1654353489795372623	src/images/libimages_helper.a	9714d15cfefb8cde
+1	8779	1654350861103288687	src/CMakeFiles/how_to_pass_art_classes.dir/main.cpp.o	8179bbc78e24c42a
+544	628	1654352861594907570	src/how_to_pass_art_classes	b187be6498837831
+1	145	1654353531390386284	src/how_to_pass_art_classes	7443b226822ccbd4
+1	8851	1654353609867412092	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+8851	8995	1654353610015412141	src/how_to_pass_art_classes	7443b226822ccbd4
+2	8667	1654353651372425752	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+3	8917	1654353651623425834	src/images/CMakeFiles/images_helper.dir/imagesHelper.cpp.o	123d9d3f9f120bdf
+8917	9080	1654353651777425885	src/images/libimages_helper.a	9714d15cfefb8cde
+9080	9221	1654353651931425936	src/how_to_pass_art_classes	7443b226822ccbd4
+2	8247	1654353669909431854	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+8247	8390	1654353670060431903	src/how_to_pass_art_classes	7443b226822ccbd4
+2	8831	1654353684118436530	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+8831	9034	1654353684326436598	src/how_to_pass_art_classes	7443b226822ccbd4
+1	10188	1654353727413450781	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+10188	10330	1654353727560450829	src/how_to_pass_art_classes	7443b226822ccbd4
+1	8155	1654353743208455980	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+8155	8297	1654353743354456029	src/how_to_pass_art_classes	7443b226822ccbd4
+1	1019	1654353747205457296	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+1019	1121	1654353747305457329	src/how_to_pass_art_classes	7443b226822ccbd4
+1	547	1654353752964459192	src/CMakeFiles/how_to_pass_art_classes.dir/app/main.cpp.o	14c58e142aedef40
+547	636	1654353753052459221	src/how_to_pass_art_classes	7443b226822ccbd4

@@ -1,0 +1,4 @@
+/var/lib/snapd/snap/clion/193/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/var/lib/snapd/snap/clion/193/bin/ninja/linux/ninja -G Ninja -S /home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes -B /home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug
