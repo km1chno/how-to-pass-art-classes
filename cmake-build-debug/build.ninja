@@ -148,6 +148,13 @@ build src/images/CMakeFiles/images_helper.dir/imagesHelper.cpp.o: CXX_COMPILER__
   OBJECT_DIR = src/images/CMakeFiles/images_helper.dir
   OBJECT_FILE_DIR = src/images/CMakeFiles/images_helper.dir
 
+build src/images/CMakeFiles/images_helper.dir/datasetManager.cpp.o: CXX_COMPILER__images_helper_Debug /home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/src/images/datasetManager.cpp || cmake_object_order_depends_target_images_helper
+  DEP_FILE = src/images/CMakeFiles/images_helper.dir/datasetManager.cpp.o.d
+  FLAGS = -g -std=gnu++20
+  INCLUDES = -I/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/src -I/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/lib/CImg-3.1.3 -I/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/src/images -I/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/src/images/../../lib/CImg-3.1.3
+  OBJECT_DIR = src/images/CMakeFiles/images_helper.dir
+  OBJECT_FILE_DIR = src/images/CMakeFiles/images_helper.dir
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target images_helper
@@ -156,7 +163,7 @@ build src/images/CMakeFiles/images_helper.dir/imagesHelper.cpp.o: CXX_COMPILER__
 #############################################
 # Link the static library src/images/libimages_helper.a
 
-build src/images/libimages_helper.a: CXX_STATIC_LIBRARY_LINKER__images_helper_Debug src/images/CMakeFiles/images_helper.dir/imagesHelper.cpp.o
+build src/images/libimages_helper.a: CXX_STATIC_LIBRARY_LINKER__images_helper_Debug src/images/CMakeFiles/images_helper.dir/imagesHelper.cpp.o src/images/CMakeFiles/images_helper.dir/datasetManager.cpp.o
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = src/images/CMakeFiles/images_helper.dir
   POST_BUILD = :

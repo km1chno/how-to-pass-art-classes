@@ -1,32 +1,35 @@
-#ifndef _IMAGES_HELPER_HEADER_
-#define _IMAGES_HELPER_HEADER_
+//#ifndef _IMAGES_HELPER_CPP_
+//#define _IMAGES_HELPER_CPP_
 #include <iostream>
 #include <filesystem>
 #define cimg_use_jpeg
 #include "CImg.h"
 using namespace cimg_library;
 
+typedef std::tuple<unsigned char,unsigned char,unsigned char> unsignedCharTuple;
 
-static CImg<unsigned char> resizeImage(const CImg<unsigned char> &image, int width, int height) {
+CImg<unsigned char> resizeImage(const CImg<unsigned char> &image, int width, int height) {
     return std::move(image.get_resize(width, height));
 }
 
-static CImg<unsigned char> loadImageFromRes(const std::string& filename) {
-    const std::string current_path = std::filesystem::current_path();
-    const std::string full_path = current_path + "/../../res/" + filename;
-    return CImg<unsigned char>().get_load_jpeg(&full_path[0]);
+std::string getResPath() {
+    return std::string(std::filesystem::current_path()) + "/../../res/";
 }
 
-static CImg<unsigned char> saveImageToRes(const std::string& filename, const CImg<unsigned char>& image) {
-    const std::string current_path = std::filesystem::current_path();
-    const std::string full_path = current_path + "/../../res/" + filename;
-    return image.save_jpeg(&full_path[0]);
+CImg<unsigned char> loadImageFromRes(const std::string& filename) {
+    std::string fullPath = getResPath() + filename;
+    return CImg<unsigned char>().get_load_jpeg(&fullPath[0]);
 }
 
-static std::vector<std::tuple<unsigned char,unsigned char,unsigned char>> convertImageToVectorRGB(const CImg<unsigned char>& image) {
+CImg<unsigned char> saveImageToRes(const std::string& filename, const CImg<unsigned char>& image) {
+    std::string fullPath = getResPath() + filename;
+    return image.save_jpeg(&fullPath[0]);
+}
+
+std::vector<unsignedCharTuple> convertImageToVectorRGB(const CImg<unsigned char>& image) {
     const int width = image.width();
     const int height = image.height();
-    std::vector<std::tuple<unsigned char,unsigned char,unsigned char>> res;
+    std::vector<unsignedCharTuple> res;
     for (int r = 0; r < height; ++r)
         for (int c = 0; c < width; ++c) {
             unsigned char reg = image(c, r, 0, 0),
@@ -37,7 +40,7 @@ static std::vector<std::tuple<unsigned char,unsigned char,unsigned char>> conver
     return res;
 }
 
-static CImg<unsigned char> loadImageFromVectorRGB(const std::vector<std::tuple<unsigned char,unsigned char,unsigned char>> &input, int width, int height) {
+CImg<unsigned char> loadImageFromVectorRGB(const std::vector<unsignedCharTuple> &input, int width, int height) {
     CImg<unsigned char> result(width, height, 1, 3);
     int next = 0;
     for (int r = 0; r < height; ++r)
@@ -51,11 +54,12 @@ static CImg<unsigned char> loadImageFromVectorRGB(const std::vector<std::tuple<u
     return result;
 }
 
-static void just_for_fun() {
+void just_for_fun() {
     auto img = loadImageFromRes("exm.jpg");
     auto vec = convertImageToVectorRGB(img);
     auto imgnew = loadImageFromVectorRGB(vec, img.width(), img.height());
     saveImageToRes("exm2.jpg", imgnew);
     std::cout << "Hello, World!" << std::endl;
 }
-#endif
+
+//#endif
