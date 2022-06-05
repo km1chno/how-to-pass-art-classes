@@ -1,48 +1,38 @@
-#include <iostream>
 #include <Eigen/Dense>
+#include "pca.h"
 
-using namespace Eigen;
+/* returns covariance matrix of variables being columns of X */
+Eigen::MatrixXf getCovarianceMatrix(Eigen::MatrixXf X) {
+    Eigen::MatrixXf centered = X.rowwise() - X.colwise().mean();
+    Eigen::MatrixXf cov = (centered.adjoint() * centered) / double(X.rows() - 1);
+    return cov;
+}
 
-enum PCAOptions {
-    useComponents = 0,
-    useFraction = 1
-};
+/* Standarize X before using any PCA function! */
+/* Functions below return the feature matrix, to recast the data multiply data_matrix * feature_matrix */
 
-/* Standarize X before using! */
-MatrixXf PCA(MatrixXf X, int components=1, double infoFraction=1, PCAOptions options=useComponents) {
-    MatrixXf centered = X.rowwise() - X.colwise().mean();
-    MatrixXf cov = (centered.adjoint() * centered) / double(X.rows() - 1);
+/* returns feature matrix with n_columns = components */
+Eigen::MatrixXf pcaComponents(Eigen::MatrixXf X, int components) {
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> es(getCovarianceMatrix(X));
+    return es.eigenvectors().rightCols(components);
+}
 
-    SelfAdjointEigenSolver<MatrixXf> es(cov);
-    std::cout << "The eigenvalues of cov matrix are:\n" << es.eigenvalues().transpose() << std::endl;
-    std::cout << "Eigenvectors:\n" << es.eigenvectors() << std::endl;
-
-    VectorXf normalizedEigenvalues = es.eigenvalues() / es.eigenvalues().sum();
-    std::cout << "The normalized eigenvalues of cov matrix are:\n" << normalizedEigenvalues << std::endl;
+/* returns feature matrix with enough columns to preserve at least <fraction> of information */
+Eigen::MatrixXf pcaFraction(Eigen::MatrixXf X, double fraction) {
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> es(getCovarianceMatrix(X));
+    Eigen::VectorXf normalizedEigenvalues = es.eigenvalues() / es.eigenvalues().sum();
 
     double eigenSum = 0;
-    int _components = 0;
+    int components = 0;
     for (int i = normalizedEigenvalues.cols()-1; i >= 0; i--) {
         eigenSum += normalizedEigenvalues(i);
-        _components++;
-        if (eigenSum >= infoFraction)
+        components++;
+        if (eigenSum >= fraction)
             break;
     }
-
-    if (options == useComponents) 
-        _components = components;
-
-    MatrixXf featureMat = es.eigenvectors().rightCols(_components);
-
-    std::cout << "Feature matrix:\n" << featureMat << "\n";
-
-    MatrixXf result = X * featureMat;
-    return result;
+    return es.eigenvectors().rightCols(components);
 }
 
 int main() {
-    MatrixXf mat = MatrixXf::Random(3, 5);
-    MatrixXf result = PCA(mat, 2, 0, useComponents);
-
-    std::cout << "input:\n" << mat << "\n\nresult:\n" << result << "\n";
+    
 }
