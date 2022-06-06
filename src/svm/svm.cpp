@@ -7,14 +7,14 @@
 #include "svm.h"
 
 const double EPS = 1e-6;
-const int STEPS = 1000;
+const int STEPS = 1000000;
 
 double LinSVM::calc_accuracy() {
     double correct = 0;
-    for (int i = 0; i < m; i++) 
+    for (int i = 0; i < Xv.rows(); i++) 
         if (yv(i)*classify(Xv.row(i)) > 0)
             correct++;
-    return correct/m;
+    return correct/Xv.rows();
 }
 
 void LinSVM::SMO(double c) {
@@ -71,10 +71,12 @@ LinSVM::LinSVM(
     int _d,
     Eigen::MatrixXd _Xt, Eigen::MatrixXd _Xv,
     Eigen::MatrixXd _yt, Eigen::MatrixXd _yv
-) : m(_Xt.rows()), d(_d), Xt(_Xt), Xv(_Xv), yt(_yt), yv(_yv) {}
+) : m(_Xt.rows()), d(_d), Xt(_Xt), Xv(_Xv), yt(_yt), yv(_yv) {
+    K = Eigen::MatrixXd::Zero(m, m);
+}
 
 int LinSVM::classify(const Eigen::VectorXd &x) {
-    return (w.dot(x) >= 0) ? 1 : -1;
+    return (w.dot(x)+b >= 0) ? 1 : -1;
 }
 
 void LinSVM::fit(double low_c, double high_c, int n_c) {
@@ -92,7 +94,7 @@ void LinSVM::fit(double low_c, double high_c, int n_c) {
     for (int i = 0; i < m; i++)
         for (int j = i; j < m; j++) 
             K(i, j) = K(j, i) = Xt.row(i).dot(Xt.row(j));
-
+        
     for (auto c : C) {
         SMO(c);
         double acc = calc_accuracy();
@@ -111,8 +113,3 @@ void LinSVM::fit(double low_c, double high_c, int n_c) {
     w = _w;
     b = _b;
 }
-
-int main() {
-
-}
-        
