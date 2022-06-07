@@ -3,6 +3,8 @@
 #include <bits/stdc++.h>
 #include <Eigen/Dense>
 #include "svm.h"
+#include "tools.h"
+#include "pca.h"
 
 using namespace std;
 
@@ -65,7 +67,7 @@ int main() {
 
     std::cout << "Training set: " << vt.size() << ", " << int(train_frac * m1) << "/" << int(train_frac * m2) << "\n";
     std::cout << "Ver set:      " << vv.size() << ", " << int(ver_frac * m1) << "/" << int(ver_frac * m2) << "\n";
-    std::cout << "Test set:     " << vtest.size() << ", " << int(m1 - train_frac * m1 - ver_frac * m1) << "/" << int(m2 - train_frac * m2 - ver_frac * m2) << "\n";
+    std::cout << "Test set:     " << vtest.size() << ", " << m1 - int(train_frac * m1) - int(ver_frac * m1) << "/" << m2 - int(train_frac * m2) - int(ver_frac * m2) << "\n";
 
     int d = vt[0].size()-1;
     Eigen::MatrixXd Xt(vt.size(), d);
@@ -90,8 +92,18 @@ int main() {
             Xtest(i, j) = vtest[i][j];
         ytest(i) = vtest[i].back();
     }
-    
-    LinSVM svm(d, Xt, Xv, yt, yv);
+
+    //standarizeData(Xt, Xv, Xtest); <- makes everything worse:(
+
+    Eigen::MatrixXd feature_mat = pcaFraction(Xt, 0.97);
+    std::cout << "number of features: " << feature_mat.cols() << "\n";
+
+    Xt *= feature_mat;
+    Xv *= feature_mat;
+    Xtest *= feature_mat;
+
+    LinSVM svm(Xt.cols(), Xt, Xv, yt, yv);
+
     svm.fit(100.0, 300.0, 20);
 
     double M = Xtest.rows();
