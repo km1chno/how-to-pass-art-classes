@@ -12,6 +12,7 @@ $(TARGET): $(OBJ_FILES)
 	g++ $(LDFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	mkdir -p obj
 	g++ $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 .PHONY: clean
