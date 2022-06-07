@@ -32,7 +32,3 @@ Eigen::MatrixXf pcaFraction(Eigen::MatrixXf X, double fraction) {
     }
     return es.eigenvectors().rightCols(components);
 }
-
-int main() {
-    
-}
