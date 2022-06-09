@@ -56,4 +56,3 @@ void saveDoubleRepresentedGenres() {
         out.close();
     }
 }
-

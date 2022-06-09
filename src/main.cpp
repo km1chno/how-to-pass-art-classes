@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "datasetManager.cpp"
+//#include "images/datasetManager.h"
+//#include "pca/pca.h"
+//#include "svm/svm.h"
 
 const std::string genresForInput[] =
         {"Post-Impressionism", "Cubism"};
@@ -30,8 +32,10 @@ std::vector<std::vector<std::vector<double>>> getDoubleVectorGenres() {
 }
 
 int main() {
-    resizeAllImagesFromRes();
-    saveDoubleRepresentedGenres();
-    getDoubleVectorGenres();
+    //Eigen::MatrixXf m(2,2);
+    //resizeAllImagesFromRes();
+    //saveDoubleRepresentedGenres();
+    //getDoubleVectorGenres();
     std::cout << "start";
+    //getCovarianceMatrix(0);
 }

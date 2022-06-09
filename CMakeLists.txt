@@ -3,5 +3,5 @@ project(how_to_pass_art_classes)
 set(CMAKE_CXX_STANDARD 20)
 
 
-include_directories(src lib/CImg-3.1.3)
+include_directories(src lib/CImg-3.1.3 lib/Eigen)
 add_subdirectory(src)

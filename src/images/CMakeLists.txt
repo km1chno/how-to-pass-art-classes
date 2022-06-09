@@ -3,9 +3,14 @@ project(images_helper)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(SOURCE_FILES imagesHelper.cpp datasetManager.cpp ${PROJECT_SOURCE_DIR}/../../lib/CImg-3.1.3/CImg.h)
-add_library(images_helper ${SOURCE_FILES})
+set(SOURCE_FILES imagesHelper.cpp datasetManager.cpp datasetManager.h)
 include_directories(../../lib/CImg-3.1.3)
-link_directories(../../lib/CImg-3.1.3)
+add_library(images_helper ${SOURCE_FILES})
+
+target_include_directories(images_helper
+        PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        )
 
 
