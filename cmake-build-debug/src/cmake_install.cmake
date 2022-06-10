@@ -47,3 +47,18 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/images/cmake_install.cmake")
 endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/pca/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/svm/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/dandrozavr/work/UJ/mpum/main/proj/how-to-pass-art-classes/cmake-build-debug/src/hog/cmake_install.cmake")
+endif()
+

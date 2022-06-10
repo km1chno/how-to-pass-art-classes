@@ -11,6 +11,7 @@ include_directories(../lib)
 add_subdirectory(images)
 add_subdirectory(pca)
 add_subdirectory(svm)
+add_subdirectory(hog)
 
 set(SOURCE_FILES main.cpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -21,6 +22,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} images_helper)
 target_link_libraries(${PROJECT_NAME} pca_lib)
 target_link_libraries(${PROJECT_NAME} svm_lib)
+target_link_libraries(${PROJECT_NAME} hog_lib)
 
 
 
