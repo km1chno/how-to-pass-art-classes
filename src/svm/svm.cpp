@@ -7,7 +7,7 @@
 #include "svm.h"
 
 const double EPS = 1e-6;
-const int STEPS = 500000;
+const int STEPS = 30000;
 
 double LinSVM::calc_accuracy() {
     double correct = 0;
@@ -21,6 +21,7 @@ void LinSVM::SMO(double c) {
     a = Eigen::VectorXd::Zero(m);
     w = Eigen::VectorXd::Zero(d);
     b = 0;
+    double _m = m;
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -35,10 +36,10 @@ void LinSVM::SMO(double c) {
         L = H = 0;
         if (yt(i) != yt(j)) {
             L = std::max(0.0, a(j) - a(i));
-            H = std::min(c/m, c/m - a(i) + a(j));
+            H = std::min(c/_m, c/_m - a(i) + a(j));
         } else {
-            L = std::max(0.0, a(i) + a(j) - c/m);
-            H = std::min(c/m, a(i) + a(j));
+            L = std::max(0.0, a(i) + a(j) - c/_m);
+            H = std::min(c/_m, a(i) + a(j));
         }
 
         double A = 2*K(i, j) - K(i, i) - K(j, j);

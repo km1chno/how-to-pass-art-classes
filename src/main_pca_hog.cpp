@@ -52,7 +52,7 @@ int main() {
     for (auto row : v)
         if (row.back() == 1)
             A.push_back(row);
-        else 
+        else
             B.push_back(row);
     std::random_shuffle(A.begin(), A.end());
     std::random_shuffle(B.begin(), B.end());
@@ -66,21 +66,21 @@ int main() {
 
     int a = train_frac * m1;
     int b = ver_frac * m1;
-    for (int i = 0; i < a; i++) 
+    for (int i = 0; i < a; i++)
         vt.push_back(A[i]);
-    for (int i = a; i < a+b; i++) 
+    for (int i = a; i < a+b; i++)
         vv.push_back(A[i]);
-    for (int i = a+b; i < m1; i++) 
+    for (int i = a+b; i < m1; i++)
         vtest.push_back(A[i]);
-    
+
     a = train_frac * m2;
     b = ver_frac * m2;
-    for (int i = 0; i < a; i++) 
+    for (int i = 0; i < a; i++)
         vt.push_back(B[i]);
 
-    for (int i = a; i < a+b; i++) 
+    for (int i = a; i < a+b; i++)
         vv.push_back(B[i]);
-    for (int i = a+b; i < m2; i++) 
+    for (int i = a+b; i < m2; i++)
         vtest.push_back(B[i]);
 
     //Eigen::MatrixXf trainmat = Eigen::MatrixXf(vt.size(), );

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <filesystem>
 #define cimg_use_jpeg
-#include "CImg.h"
+#include <CImg-3.1.3/CImg.h>
 #include "imagesHelper.h"
 
 using namespace cimg_library;
@@ -15,7 +15,7 @@ CImg<unsigned char> resizeImage(const CImg<unsigned char> &image, int width, int
 }
 
 std::string getResPath() {
-    return std::string(std::filesystem::current_path()) + "/../../res/";
+    return std::string(std::filesystem::current_path()) + "/../res/";
 }
 
 CImg<unsigned char> loadImageFromRes(const std::string& filename) {
