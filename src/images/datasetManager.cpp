@@ -5,10 +5,11 @@
 using namespace cimg_library;
 
 const std::tuple<std::string, std::string, int> genres[] =
-        {{"Post-Impressionism", "Vincent_van_Gogh_", 5},
-         {"Cubism", "Pablo_Picasso_", 5}};
+        {{"Post-Impressionism", "Vincent_van_Gogh_", 100},
+         {"Cubism", "Pablo_Picasso_", 100}};
 
 void resizeAllImagesFromRes(int width = 100, int height = 100) {
+    std::cerr << "WIDTH HEIGHT: " << width << " " << height << '\n';
     for (auto item : genres) {
         std::string gener, author;
         int n_arts;

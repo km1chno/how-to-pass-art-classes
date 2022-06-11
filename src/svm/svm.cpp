@@ -2,12 +2,12 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include <Eigen/Dense>
+#include "Dense"
 
 #include "svm.h"
 
 const double EPS = 1e-6;
-const int STEPS = 1000000;
+const int STEPS = 500000;
 
 double LinSVM::calc_accuracy() {
     double correct = 0;
@@ -25,7 +25,6 @@ void LinSVM::SMO(double c) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(0, m-1);
-
     for (int step = 0; step < STEPS; step++) {
         int i = distrib(gen);
         int j = distrib(gen);
@@ -58,7 +57,6 @@ void LinSVM::SMO(double c) {
         w += yt(i)*(a(i)-old_i)*Xt.row(i);
         w += yt[j]*(a[j]-old_j)*Xt.row(j);
     }
-        
     b = yt(0) - w.dot(Xt.row(0));
     for (int i = 0; i < m; i++) 
         if (a(i) > EPS and a(i) + EPS < c/m) {
@@ -76,7 +74,7 @@ LinSVM::LinSVM(
 }
 
 int LinSVM::classify(const Eigen::VectorXd &x) {
-    return (w.dot(x)+b >= 0) ? 1 : -1;
+    return (w.dot(x)+b > 0) ? 1 : -1;
 }
 
 void LinSVM::fit(double low_c, double high_c, int n_c) {
@@ -94,6 +92,8 @@ void LinSVM::fit(double low_c, double high_c, int n_c) {
     for (int i = 0; i < m; i++)
         for (int j = i; j < m; j++) 
             K(i, j) = K(j, i) = Xt.row(i).dot(Xt.row(j));
+
+    std::cout << "Calculated Gramms Matrix" << std::endl;
         
     for (auto c : C) {
         SMO(c);
@@ -108,7 +108,7 @@ void LinSVM::fit(double low_c, double high_c, int n_c) {
         std::cout << "Accuracy for " << c << ": " << acc << "\n";
     }
 
-    std::cout << "Best accuract for " << best_c << " was " << best_acc << "\n";
+    std::cout << "Best accuracy for " << best_c << " was " << best_acc << "\n";
 
     w = _w;
     b = _b;

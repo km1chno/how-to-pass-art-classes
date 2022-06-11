@@ -2,7 +2,7 @@
 #define _LIN_SVM_
 
 #include <vector>
-#include <Eigen/Dense>
+#include "Dense"
 
 class LinSVM {
     int m;                      /* number of observations in training set */

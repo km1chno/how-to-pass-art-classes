@@ -4,6 +4,8 @@
 #include <filesystem>
 #define cimg_use_jpeg
 #include "CImg.h"
+#include "imagesHelper.h"
+
 using namespace cimg_library;
 
 typedef std::tuple<unsigned char,unsigned char,unsigned char> unsignedCharTuple;

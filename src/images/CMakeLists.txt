@@ -3,7 +3,7 @@ project(images_helper)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(SOURCE_FILES imagesHelper.cpp datasetManager.cpp datasetManager.h)
+set(SOURCE_FILES  datasetManager.h imagesHelper.h imagesHelper.cpp datasetManager.cpp)
 include_directories(../../lib/CImg-3.1.3)
 add_library(images_helper ${SOURCE_FILES})
 

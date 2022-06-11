@@ -1,1 +1,5 @@
-/cmake-build-debug/
+cmake-build-debug
+obj/*
+main
+*NEW.jpg
+*_Representation

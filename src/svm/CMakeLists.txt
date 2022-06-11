@@ -7,5 +7,4 @@ target_include_directories(svm_lib
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         )
 
-add_executable(svm_test svm.h svm.cpp test.cpp)
 

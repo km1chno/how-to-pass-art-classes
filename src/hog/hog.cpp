@@ -50,6 +50,16 @@ vector<vector<float>> Hog::getHistogram(const vector<vector<float>> &image) {
     return answer;
 }
 
+vector<float> Hog::getFlatHistogram(const vector<vector<float>> &image) {
+    auto tempRes = getHistogram(image);
+    vector<float> res;
+    for (const auto &vec : tempRes) {
+        res.reserve(res.size() + vec.size());
+        res.insert(std::end(res), std::begin(vec), std::end(vec));
+    }
+    return res;
+}
+
 void Hog::computeGradient(const vector<vector<float>> &image, const int &posx, const int &posy, float &gradx, float &grady, const int &n_rows, const int &n_cols) {
     if (posx + 1 != n_cols) {
         gradx = image[posx + 1][posy];
@@ -98,28 +108,31 @@ vector<float> Hog::getCellHistogram(const vector<vector<float>> &angles, const v
         }
 }
 
-vector<float> Hog::l2blockNormalization(const vector<vector<float>>& vec) {
-    vector <float> flat_vec, temp;
-    for (const auto &v : vec)
+vector<float> flatter(const vector<vector<float>> &vec) {
+    vector<float> flat_vec;
+    for (const auto &v : vec) {
+        flat_vec.reserve(flat_vec.size() + v.size() + 1);
         flat_vec.insert(std::end(flat_vec), std::begin(v), std::end(v));
-    temp = flat_vec;
+    }
+    return std::move(flat_vec);
+}
 
-    std::transform(std::begin(flat_vec), std::end(flat_vec), std::end(temp), [](const float &x) {
+vector<float> Hog::l2blockNormalization(const vector<vector<float>>& vec) {
+    vector <float> flat_vec = flatter(vec), temp;
+    temp = flat_vec;
+    std::transform(std::begin(flat_vec), std::end(flat_vec), std::begin(temp), [](const float &x) {
         return x * x;
     });
-
-
     const float epsilon = 0.00000001;
 
-    //float den = std::accumulate(std::begin(temp), std::end(temp), 0.0f);
-    float den = 1;
+    float den = std::accumulate(std::begin(temp), std::end(temp), 0.0f);
     den = std::sqrt(den + epsilon);
 
-    /*if (den != 0)
+    if (den != 0)
         std::transform(std::begin(flat_vec), std::end(flat_vec), std::begin(flat_vec), [den](const float &nom) {
             return nom / den;
-        });*/
-    return flat_vec;
+        });
+    return std::move(flat_vec);
 }
 
 
