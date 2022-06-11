@@ -32,7 +32,7 @@ std::vector<std::vector<std::vector<double>>> getDoubleVectorGenres() {
 int main() {
     freopen("../../res/paintings.data", "w", stdout);
     std::cerr << "start1" << std::endl;
-    resizeAllImagesFromRes(50, 50);
+    resizeAllImagesFromRes(80, 80);
     std::cerr << "start2" << std::endl;
     saveDoubleRepresentedGenres();
     std::vector<std::vector<std::vector<double>>> vec = getDoubleVectorGenres();

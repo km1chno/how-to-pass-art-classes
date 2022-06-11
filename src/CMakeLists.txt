@@ -14,33 +14,34 @@ add_subdirectory(pca)
 add_subdirectory(svm)
 add_subdirectory(hog)
 
+set(PROJECT_SOURCE_FILES main.cpp)
 set(SOURCE_FILES main_pca_hog.cpp tools.h tools.cpp)
 set(SOURCE_FILES2 main_generate_paintdata.cpp)
 set(SOURCE_FILES3 main_pca_svm.cpp tools.h tools.cpp)
-set(SCRYPT_NAME out_images_scrypt)
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-add_executable(${SCRYPT_NAME} ${SOURCE_FILES2})
-add_executable(pca_svm_test ${SOURCE_FILES3})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
+add_executable(main_pca_hog ${SOURCE_FILES})
+add_executable(main_generate_paintdata ${SOURCE_FILES2})
+add_executable(main_pca_svm ${SOURCE_FILES3})
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-        ${PROJECT_SOURCE_DIR}/lib
-        ${CMAKE_CURRENT_LIST_DIR}
-        )
+#target_include_directories(${PROJECT_NAME} PUBLIC
+#        ${PROJECT_SOURCE_DIR}/lib
+#        ${CMAKE_CURRENT_LIST_DIR}
+#        )
 
-target_link_libraries(${PROJECT_NAME} images_helper)
-target_link_libraries(${PROJECT_NAME} pca_lib)
-target_link_libraries(${PROJECT_NAME} svm_lib)
-target_link_libraries(${PROJECT_NAME} hog_lib)
+target_link_libraries(main_pca_hog images_helper)
+target_link_libraries(main_pca_hog pca_lib)
+target_link_libraries(main_pca_hog svm_lib)
+target_link_libraries(main_pca_hog hog_lib)
 
 
-target_link_libraries(${SCRYPT_NAME} images_helper)
-target_link_libraries(${SCRYPT_NAME} pca_lib)
-target_link_libraries(${SCRYPT_NAME} svm_lib)
+target_link_libraries(main_generate_paintdata images_helper)
+target_link_libraries(main_generate_paintdata pca_lib)
+target_link_libraries(main_generate_paintdata svm_lib)
 
-target_link_libraries(pca_svm_test images_helper)
-target_link_libraries(pca_svm_test  pca_lib)
-target_link_libraries(pca_svm_test svm_lib)
-target_link_libraries(pca_svm_test hog_lib)
+target_link_libraries(main_pca_svm images_helper)
+target_link_libraries(main_pca_svm  pca_lib)
+target_link_libraries(main_pca_svm svm_lib)
+target_link_libraries(main_pca_svm hog_lib)
 
 

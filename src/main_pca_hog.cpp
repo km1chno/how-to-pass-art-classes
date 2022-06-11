@@ -13,7 +13,7 @@ vector<vector<float>> useHogFeatures(vector<vector<float>> vt) {
     Hog hog = Hog();
     vector<vector<float>> newVt;
     for (const auto &vec : vt) {
-        const int sz = 50;
+        const int sz = int(sqrt(vec.size()));
         vector<vector<float>> image(sz);
         for (int i = 0; i + 1 < vec.size(); ++i) {
             image[i / sz].push_back(vec[i]);
