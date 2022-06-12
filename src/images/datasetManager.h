@@ -12,4 +12,9 @@ void saveDoubleRepresentedSingleImage(const std::vector<unsignedCharTuple>& imag
 
 void saveDoubleRepresentedGenres();
 
+/* delete all files from AugmentedDataset and GreyScaleDataset */
+void deleteAugmentedDataset();
+/* prepares dataset for learning (augmentation + greyscale) */
+void prepareDataset(int width, int height, bool augment);
+
 #endif //HOW_TO_PASS_ART_CLASSES_DATASETMANAGER_H

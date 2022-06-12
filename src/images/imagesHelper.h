@@ -20,4 +20,23 @@ std::vector<unsignedCharTuple> convertImageToVectorRGB(const CImg<unsigned char>
 CImg<unsigned char> loadImageFromVectorRGB(const std::vector<unsignedCharTuple> &input, int width, int height);
 void just_for_fun();
 
+/* path relative to PROJECT/res/Dataset/ without extension, example: */
+/* for Dataset/Cubism/Picasso1.jpg, path = Cubism/Picasso1 */
+/* copies image from Dataset to AugmentedDataset, scales the result */
+void copyImageIntoAugmentedDataset(std::string &path, int width, int height);
+/* generates three flipped images (x, y, xy) from original image and saves in AugmentedDataset directory, scales the result) */
+void generateFlippedImages(const std::string& path, int width, int height);
+/* generates rotated versions of input image (90, 180, 270) and saves in AugmentedDateset directory, scales the result) */
+void generateRotatedImages(const std::string& path, int width, int height);
+/* generates cropped (randomly) versions of input image and saves in AugmentedDateset directory, scales the result) */
+void generateCroppedImages(const std::string& path, int width, int height, int n_images);
+/* generates version of image with salt and pepper noise (random white and black pixels) and saves in AugmentedDateset directory, scales the result) */
+/* intensity must be in range [0, 1] */
+void generateSaltAndPepperNoiseImage(const std::string& path, int width, int height, double intensity);
+
+/* path relative to PROJECT/res/AugmentedDataset/ without extension, example: */
+/* for AugmentedDataset/Cubism/Picasso1.jpg, path = Cubism/Picasso1 */
+/* generates grey scale image and saves to GreyScaleDataset directory */
+void generateGrayScaleImage(const std::string& path);
+
 #endif

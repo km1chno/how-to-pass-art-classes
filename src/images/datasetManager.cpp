@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include "imagesHelper.h"
 
 using namespace cimg_library;
@@ -7,6 +8,10 @@ using namespace cimg_library;
 const std::tuple<std::string, std::string, int> genres[] =
         {{"Post-Impressionism", "Vincent_van_Gogh_", 400},
          {"Cubism", "Pablo_Picasso_", 400}};
+
+const std::vector<std::string> paintingGenres = {
+        "Cubism", "Post-Impressionism"
+};
 
 void resizeAllImagesFromRes(int width = 100, int height = 100) {
     std::cerr << "WIDTH HEIGHT: " << width << " " << height << '\n';
@@ -55,5 +60,40 @@ void saveDoubleRepresentedGenres() {
             saveDoubleRepresentedSingleImage(convertImageToVectorRGB(img), out);
         }
         out.close();
+    }
+}
+
+void deleteAugmentedDataset() {
+    for (const auto& genre : paintingGenres) {
+        for (const auto & entry : std::filesystem::directory_iterator("../res/AugmentedDataset/" + genre + "/"))
+            std::filesystem::remove_all(entry);
+        for (const auto & entry : std::filesystem::directory_iterator("../res/GreyScaleDataset/" + genre + "/"))
+            std::filesystem::remove_all(entry);
+    }
+}
+
+void prepareDataset(int width, int height, bool augment) {
+    for (const auto& genre : paintingGenres) {
+        /* Dataset -> AugmentedDataset */
+        std::cout << "Dataset -> AugmentedDataset" << std::endl;
+        for (const auto & entry : std::filesystem::directory_iterator("../res/Dataset/" + genre + "/")) {
+            std::string path = entry.path();
+            path = path.substr(15, path.size()-19);
+            std::cout << path << std::endl;
+            copyImageIntoAugmentedDataset(path, 52, 52);
+            if (augment) {
+                generateFlippedImages(path, 52, 52);
+                generateRotatedImages(path, 52, 52);
+                generateCroppedImages(path, 52, 52, 3);
+            }
+        }
+        /* AugmentedDataset -> GreyScaleDataset */
+        std::cout << "AugmentedDataset -> GreyScaleDataset" << std::endl;
+        for (const auto & entry : std::filesystem::directory_iterator("../res/AugmentedDataset/" + genre + "/")) {
+            std::string path = entry.path();
+            path = path.substr(24, path.size()-28);
+            std::cout << path << std::endl;
+            generateGrayScaleImage(path);
+        }
     }
 }
