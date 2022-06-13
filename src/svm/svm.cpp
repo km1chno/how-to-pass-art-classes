@@ -7,7 +7,7 @@
 #include "svm.h"
 
 const double EPS = 1e-6;
-const int STEPS = 30000;
+const int STEPS = 20000000;
 
 double LinSVM::calc_accuracy() {
     double correct = 0;
@@ -42,6 +42,9 @@ void LinSVM::SMO(double c) {
             H = std::min(c/_m, a(i) + a(j));
         }
 
+        K(i, j) = K(j, i) = Xt.row(i).dot(Xt.row(j));
+        K(i, i) = Xt.row(i).dot(Xt.row(i));
+        K(j, j) = Xt.row(j).dot(Xt.row(j));
         double A = 2*K(i, j) - K(i, i) - K(j, j);
         if (!A)
             continue;
@@ -79,23 +82,19 @@ int LinSVM::classify(const Eigen::VectorXd &x) {
 }
 
 void LinSVM::fit(double low_c, double high_c, int n_c) {
-    C = std::vector<double>(n_c);
+    /*C = std::vector<double>(n_c);
     double c = low_c;
     generate(C.begin(), C.end(), [&c, low_c, high_c, n_c] { 
         double _c = c; c += (high_c-low_c)/double(n_c); return _c;
-    });
+    });*/
+
+    C = std::vector<double>({0.1, 1, 2, 5, 10, 100, 500, 1000, 5000, 10000});
 
     double best_acc = 0;
     double best_c = C[0];
     Eigen::VectorXd _w = Eigen::VectorXd::Zero(d);    
     double _b = 0;
 
-    for (int i = 0; i < m; i++)
-        for (int j = i; j < m; j++) 
-            K(i, j) = K(j, i) = Xt.row(i).dot(Xt.row(j));
-
-    std::cout << "Calculated Gramms Matrix" << std::endl;
-        
     for (auto c : C) {
         SMO(c);
         double acc = calc_accuracy();
