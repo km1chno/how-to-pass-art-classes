@@ -1,4 +1,3 @@
-include_directories(../../lib/)
 add_library(hog_lib hog.h hog.cpp)
 
 target_include_directories(hog_lib

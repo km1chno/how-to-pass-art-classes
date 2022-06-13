@@ -9,7 +9,7 @@
 
 using namespace std;
 
-vector<vector<float>> useHogFeatures(vector<vector<float>> vt) {
+vector<vector<float>> useHogFeatures(const vector<vector<float>> &vt) {
     Hog hog = Hog();
     vector<vector<float>> newVt;
     for (const auto &vec : vt) {
@@ -22,7 +22,6 @@ vector<vector<float>> useHogFeatures(vector<vector<float>> vt) {
         hog_flat.push_back(vec.back());
         newVt.push_back(hog_flat);
     }
-    vt = newVt;
     return newVt;
 }
 

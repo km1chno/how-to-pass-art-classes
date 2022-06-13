@@ -6,7 +6,6 @@
 #define HOW_TO_PASS_ART_CLASSES_HOG_H
 
 #include <vector>
-#include <Eigen/Dense>
 
 using std::vector;
 
