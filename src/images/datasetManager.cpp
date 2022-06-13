@@ -62,7 +62,8 @@ void prepareDataset(int width, int height, bool augment) {
             if (augment) {
                 generateFlippedImages(path, width, height);
                 generateRotatedImages(path, width, height);
-                //generateCroppedImages(path, width, height, 3);
+                generateCroppedImages(path, width, height, 3);
+                generateSaltAndPepperNoiseImage(path, width, height, 0.1);
             }
         }
         /* AugmentedDataset -> GreyScaleDataset */

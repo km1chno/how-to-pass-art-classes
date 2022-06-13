@@ -23,12 +23,12 @@ class LinSVM {
     void SMO(double c);
 
 public:
-    LinSVM(int _d, Eigen::MatrixXd _Xt, Eigen::MatrixXd _Xv, Eigen::MatrixXd _yt, Eigen::MatrixXd _yv);
+    LinSVM(int _d, Eigen::MatrixXd _Xt, Eigen::MatrixXd _Xv, Eigen::VectorXd _yt, Eigen::VectorXd _yv);
     /* classifies x with hyperplane w, b */
     int classify(const Eigen::VectorXd &x);
     /* performs the whole learning process */
     /* considers n_c values of parameter c equally distributed over range [low_c, high_c] */
-    void fit(double low_c, double high_c, int n_c);  
+    void fit();
 };
 
 #endif

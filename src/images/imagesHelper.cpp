@@ -122,12 +122,12 @@ void generateSaltAndPepperNoiseImage(const std::string& path, int width, int hei
     std::uniform_int_distribution<> bidist(0, 1);
 
     double pixelsToChange = intensity * double(w*h);
-    int color[2] = {0, 255};
+    int color[2][3] = {{0, 0, 0}, {255, 255, 255}};
     for (int i = 0; i < int(pixelsToChange); i++) {
         int x = distx(gen);
         int y = disty(gen);
         int c = bidist(gen);
-        img(x, y, 0, 0) = img(x, y, 0, 1) = img(x, y, 0, 2) = color[c];
+        img.draw_point(x, y, color[c]);
     }
 
     saveImageToRes("AugmentedDataset/" + path + "_noise.jpg", resizeImage(img, width, height));
