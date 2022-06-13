@@ -25,3 +25,26 @@ void standarizeData(Eigen::MatrixXd &A, Eigen::MatrixXd &B, Eigen::MatrixXd &C) 
         for (int j = 0; j < C.cols(); j++)
             C(i, j) = (C(i, j) - mean(j))/stdev(j);
 }
+
+void minmaxscaling(Eigen::MatrixXd &A, Eigen::MatrixXd &B, Eigen::MatrixXd &C) {
+    Eigen::VectorXd maxVal = A.row(0);
+    Eigen::VectorXd minVal = A.row(0);
+
+    for (int i = 1; i < A.rows(); i++)
+        for (int j = 0; j < A.cols(); j++) {
+            maxVal(j) = std::max(maxVal(j), A(i, j));
+            minVal(j) = std::min(minVal(j), A(i, j));
+        }
+
+    for (int i = 0; i < A.rows(); i++)
+        for (int j = 0; j < A.cols(); j++)
+            A(i, j) = (A(i, j) - minVal(j)) / (maxVal(j) - minVal(j));
+
+    for (int i = 0; i < B.rows(); i++)
+        for (int j = 0; j < B.cols(); j++)
+            B(i, j) = (B(i, j) - minVal(j)) / (maxVal(j) - minVal(j));
+
+    for (int i = 0; i < C.rows(); i++)
+        for (int j = 0; j < C.cols(); j++)
+            C(i, j) = (C(i, j) - minVal(j)) / (maxVal(j) - minVal(j));
+}
