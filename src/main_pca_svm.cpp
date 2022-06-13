@@ -27,17 +27,23 @@ vector<vector<float>> useHogFeatures(vector<vector<float>> vt) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        std::cout << "Usage: min_c max_c [hog, st, pca]\n";
+    /* {cubism 4000, impressionism 4000} 1 st pca 65% 2e7 steps, flip+rot - 65% acc */
+
+    if (argc < 6) {
+        std::cout << "Usage: class1 class2 min_c max_c data_fraction [hog, st, pca]\n";
         return 0;
     }
-    float low = std::stof(argv[1]);
-    float high = std::stof(argv[2]);
+    int class1 = std::stoi(argv[1]);
+    int class2 = std::stoi(argv[2]);
+    float low = std::stof(argv[3]);
+    float high = std::stof(argv[4]);
+    float fraction = std::stof(argv[5]);
+
     std::set<std::string> params;
-    for (int i = 3; i < argc; i++)
+    for (int i = 4; i < argc; i++)
         params.insert(argv[i]);
 
-    freopen("../res/paintings.csv", "r", stdin);
+    freopen("../res/grey_scale_paintings.csv", "r", stdin);
 
     std::string input_str;
     std::vector<std::vector<float> > v;
@@ -56,9 +62,9 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::vector<float> > A, B;
     for (auto row: v)
-        if (row.front() == 0)
+        if (row.front() == class1)
             A.push_back(row);
-        else
+        else if (row.front() == class2)
             B.push_back(row);
     std::shuffle(A.begin(), A.end(), std::mt19937(std::random_device()()));
     std::shuffle(B.begin(), B.end(), std::mt19937(std::random_device()()));
@@ -67,8 +73,8 @@ int main(int argc, char *argv[]) {
     double ver_frac = 0.2;
 
     std::vector<std::vector<float> > vt, vv, vtest;
-    auto m1 = double(A.size());
-    auto m2 = double(B.size());
+    auto m1 = double(A.size()) * fraction;
+    auto m2 = double(B.size()) * fraction;
 
     int a = train_frac * m1;
     int b = ver_frac * m1;
@@ -88,10 +94,10 @@ int main(int argc, char *argv[]) {
     for (int i = a + b; i < m2; i++)
         vtest.push_back(B[i]);
 
-    /* change observation labels from {0, 1} to {-1, 1} */
-    for (int i = 0; i < vt.size(); i++) vt[i][0] = vt[i][0] * 2 - 1;
-    for (int i = 0; i < vv.size(); i++) vv[i][0] = vv[i][0] * 2 - 1;
-    for (int i = 0; i < vtest.size(); i++) vtest[i][0] = vtest[i][0] * 2 - 1;
+    /* change observation labels from {class1, class2} to {-1, 1} */
+    for (int i = 0; i < vt.size(); i++) vt[i][0] = (vt[i][0] == class1) ? -1 : 1;
+    for (int i = 0; i < vv.size(); i++) vv[i][0] = (vv[i][0] == class1) ? -1 : 1;
+    for (int i = 0; i < vtest.size(); i++) vtest[i][0] = (vtest[i][0] == class1) ? -1 : 1;
 
     /* copying labels into yt, yv, ytest vectors and deleting them from vectors */
     Eigen::VectorXd yt(vt.size());
@@ -147,8 +153,8 @@ int main(int argc, char *argv[]) {
         minmaxscaling(Xt, Xv, Xtest);
     }
     if (params.count("pca")) {
-        std::cout << "PCA for fraction of 97%\n";
-        Eigen::MatrixXd feature_mat = pcaFraction(Xt, 0.97);
+        std::cout << "PCA for fraction of 65%\n";
+        Eigen::MatrixXd feature_mat = pcaFraction(Xt, 0.65);
         std::cout << "number of features: " << feature_mat.cols() << " and samples " << feature_mat.rows() << "\n";
         Xt *= feature_mat;
         Xv *= feature_mat;
@@ -156,7 +162,7 @@ int main(int argc, char *argv[]) {
     }
 
     LinSVM svm(Xt.cols(), Xt, Xv, yt, yv);
-    svm.fit(low, high, 20);
+    svm.fit(low, high, 5);
 
     double M = Xtest.rows();
     double correct = 0;
