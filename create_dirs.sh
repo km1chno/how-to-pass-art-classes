@@ -1,10 +1,5 @@
-rm -rf res
-mkdir res
-mkdir res/Dataset
-mkdir res/Dataset/Cubism
-mkdir res/Dataset/Post-Impressionism
-mkdir res/Dataset/Northern-Renaissance
-mkdir res/Dataset/Pop-Art
+rm -rf res/AugmentedDataset
+rm -rf res/GreyScaleDataset
 mkdir res/AugmentedDataset
 mkdir res/AugmentedDataset/Cubism
 mkdir res/AugmentedDataset/Post-Impressionism
