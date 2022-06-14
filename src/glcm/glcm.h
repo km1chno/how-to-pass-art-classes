@@ -36,5 +36,6 @@ public:
     double informationMeasuresofCorrelation2();
 };
 
+vector<vector<double>> useGlcmFeatures(const vector<vector<double>> &vt);
 
 #endif //HOW_TO_PASS_ART_CLASSES_GLCM_H

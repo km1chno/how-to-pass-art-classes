@@ -307,3 +307,19 @@ vector<double> Glcm::getAllFeaturesFromMatrix() {
     return features;
 }
 
+vector<vector<double>> useGlcmFeatures(const vector<vector<double>> &vt) {
+    vector<vector<double>> newVt;
+    for (const auto &vec : vt) {
+        Glcm glcm = Glcm(3, 0, 15);
+        const int sz = int(sqrt(vec.size()));
+        vector<vector<double>> image(sz);
+        for (int i = 0; i + 1 < vec.size(); ++i) {
+            image[i / sz].push_back(vec[i]);
+        }
+        glcm.computeMatrix(image);
+        auto glcm_flat = glcm.getAllFeaturesFromMatrix();
+        newVt.push_back(glcm_flat);
+    }
+    return newVt;
+}
+
