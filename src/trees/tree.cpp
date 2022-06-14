@@ -41,7 +41,7 @@ double DecisionTree::_get_entropy_for_cut(const vector<double> &X, const vector<
     auto left_child_idxs = children_idxs.first;
     auto right_child_idxs = children_idxs.second;
     int size = Y.size(), left_size = left_child_idxs.size(), right_size = right_child_idxs.size();
-    if (left_size == 0 || right_size == 0)
+    if (left_size <= min_node_rows || right_size <= min_node_rows)
         return 0;
     double left_child_entropy = ((double)(left_size) / size) * _get_entropy(_extractRows1d(Y, left_child_idxs));
     double right_child_entropy = ((double)(right_size) / size) * _get_entropy(_extractRows1d(Y, right_child_idxs));

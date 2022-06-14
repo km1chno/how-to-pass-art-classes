@@ -33,7 +33,7 @@ class DecisionTree {
 public:
     int min_node_rows, max_depth;
     TreeNode *root;
-    explicit DecisionTree(int _max_depth = 17, int _min_node_rows = 1) : max_depth(_max_depth), min_node_rows(_min_node_rows){}
+    explicit DecisionTree(int _max_depth = 107, int _min_node_rows = 5) : max_depth(_max_depth), min_node_rows(_min_node_rows){}
     ~DecisionTree() {
         delete root;
     }

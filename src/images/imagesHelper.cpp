@@ -14,7 +14,7 @@ CImg<unsigned char> resizeImage(const CImg<unsigned char> &image, int width, int
 }
 
 std::string getResPath() {
-    return std::string(std::filesystem::current_path()) + "/../res/";
+    return std::string(std::filesystem::current_path()) + "/../../res/";
 }
 
 CImg<unsigned char> loadImageFromRes(const std::string& filename) {

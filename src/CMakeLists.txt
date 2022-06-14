@@ -56,6 +56,7 @@ target_link_libraries(main_trees pca_lib)
 target_link_libraries(main_trees svm_lib)
 target_link_libraries(main_trees glcm_lib)
 target_link_libraries(main_trees trees_lib)
+target_link_libraries(main_trees hog_lib)
 
 
 

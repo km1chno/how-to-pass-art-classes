@@ -19,7 +19,7 @@ const std::vector<std::string> paintingGenres = {
 };
 
 void saveDoubleRepresentedGenres() {
-    std::string outputFileName = "../res/grey_scale_paintings.csv";
+    std::string outputFileName = "../../res/grey_scale_paintings.csv";
     std::ofstream out(outputFileName);
 
     for (int i = 0; i < N_GENRES; i++) {
@@ -27,8 +27,10 @@ void saveDoubleRepresentedGenres() {
         int n_arts = numberOfPaintings[i];
 
         int paintingsWritten = 0;
-        for (const auto & entry : std::filesystem::directory_iterator("../res/GreyScaleDataset/" + genre + "/")) {
-            auto img = loadImageFromRes(entry.path());
+        for (const auto & entry : std::filesystem::directory_iterator("../../res/GreyScaleDataset/" + genre + "/")) {
+            auto dir = std::string(entry.path());
+            dir = dir.substr(3, dir.size() - 1);
+            auto img = loadImageFromRes(dir);
             out << i;
             for (int j = 0; j < img.width(); j++)
                 for (int k = 0; k < img.height(); k++)
@@ -43,9 +45,9 @@ void saveDoubleRepresentedGenres() {
 
 void deleteAugmentedDataset() {
     for (const auto& genre : paintingGenres) {
-        for (const auto & entry : std::filesystem::directory_iterator("../res/AugmentedDataset/" + genre + "/"))
+        for (const auto & entry : std::filesystem::directory_iterator("../../res/AugmentedDataset/" + genre + "/"))
             std::filesystem::remove_all(entry);
-        for (const auto & entry : std::filesystem::directory_iterator("../res/GreyScaleDataset/" + genre + "/"))
+        for (const auto & entry : std::filesystem::directory_iterator("../../res/GreyScaleDataset/" + genre + "/"))
             std::filesystem::remove_all(entry);
     }
 }
@@ -54,9 +56,9 @@ void prepareDataset(int width, int height, bool augment) {
     for (const auto& genre : paintingGenres) {
         /* Dataset -> AugmentedDataset */
         std::cout << "Dataset -> AugmentedDataset" << std::endl;
-        for (const auto & entry : std::filesystem::directory_iterator("../res/Dataset/" + genre + "/")) {
+        for (const auto & entry : std::filesystem::directory_iterator("../../res/Dataset/" + genre + "/")) {
             std::string path = entry.path();
-            path = path.substr(15, path.size()-19);
+            path = path.substr(18, path.size()-22);
             std::cout << path << std::endl;
             copyImageIntoAugmentedDataset(path, width, height);
             if (augment) {
@@ -67,9 +69,9 @@ void prepareDataset(int width, int height, bool augment) {
         }
         /* AugmentedDataset -> GreyScaleDataset */
         std::cout << "AugmentedDataset -> GreyScaleDataset" << std::endl;
-        for (const auto & entry : std::filesystem::directory_iterator("../res/AugmentedDataset/" + genre + "/")) {
+        for (const auto & entry : std::filesystem::directory_iterator("../../res/AugmentedDataset/" + genre + "/")) {
             std::string path = entry.path();
-            path = path.substr(24, path.size()-28);
+            path = path.substr(27, path.size()-31);
             std::cout << path << std::endl;
             generateGrayScaleImage(path);
         }
