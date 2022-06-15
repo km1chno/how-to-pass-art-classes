@@ -62,6 +62,7 @@ std::tuple<int, double, double> DecisionTree::_find_cut(const vector<vector<doub
         auto newX = _getUnique(_extractColumn(X, feature));
         for (const auto &try_cut : newX) {
             auto entropy = _get_entropy_for_cut(newX, Y, try_cut);
+            if (entropy == 1) break;
             if (entropy > opt_entropy) {
                 opt_entropy = entropy;
                 opt_cut = try_cut;
@@ -81,7 +82,7 @@ double DecisionTree::_selectMostCommonValue(const vector<int> &Y) {
         ++bins[y - mn];
     int max_bin_val = -1;
     int ind = -1;
-    for (int i = 0; i <= mx; ++i)
+    for (int i = 0; i <= mx - mn; ++i)
         if (max_bin_val < bins[i]) {
             max_bin_val = bins[i];
             ind = i;
@@ -121,7 +122,7 @@ vector<int> DecisionTree::_random_choises(int max, int amount) {
 }
 
 TreeNode* DecisionTree::_build_tree(const vector<vector<double>> &X, const vector<int> &Y, int depth) {
-    std::cout << depth << " " << Y.size() << '\n';
+    //std::cout << depth << " " << Y.size() << '\n';
     int n_samples = X.size();
     if (X.size() == 0) {
         throw "X size is 0 in decision trees";
@@ -172,7 +173,7 @@ void DecisionTree::fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y) {
     this->root = _build_tree(_X, _Y);
 }
 
-vector<int> DecisionTree::predict(const Eigen::MatrixXd &X) {
+vector<int> DecisionTree::predictRows(const Eigen::MatrixXd &X) {
     vector<int> prediction;
     for (int i = 0; i < X.rows(); ++i) {
         const Eigen::VectorXd &x = X.row(i);

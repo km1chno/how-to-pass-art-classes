@@ -7,7 +7,7 @@
 #include "svm.h"
 
 const double EPS = 1e-6;
-const int STEPS = 20000000;
+const int STEPS = 1000000;
 
 double LinSVM::calc_accuracy() {
     double correct = 0;
@@ -72,7 +72,7 @@ void LinSVM::SMO(double c) {
 LinSVM::LinSVM(
     int _d,
     Eigen::MatrixXd _Xt, Eigen::MatrixXd _Xv,
-    Eigen::MatrixXd _yt, Eigen::MatrixXd _yv
+    Eigen::VectorXd _yt, Eigen::VectorXd _yv
 ) : m(_Xt.rows()), d(_d), Xt(_Xt), Xv(_Xv), yt(_yt), yv(_yv) {
     K = Eigen::MatrixXd::Zero(m, m);
 }
@@ -81,13 +81,7 @@ int LinSVM::classify(const Eigen::VectorXd &x) {
     return (w.dot(x)+b > 0) ? 1 : -1;
 }
 
-void LinSVM::fit(double low_c, double high_c, int n_c) {
-    /*C = std::vector<double>(n_c);
-    double c = low_c;
-    generate(C.begin(), C.end(), [&c, low_c, high_c, n_c] { 
-        double _c = c; c += (high_c-low_c)/double(n_c); return _c;
-    });*/
-
+void LinSVM::fit() {
     C = std::vector<double>({0.1, 1, 2, 5, 10, 100, 500, 1000, 5000, 10000});
 
     double best_acc = 0;
@@ -98,17 +92,18 @@ void LinSVM::fit(double low_c, double high_c, int n_c) {
     for (auto c : C) {
         SMO(c);
         double acc = calc_accuracy();
+        //std::cout << acc << '\n';
         if (acc > best_acc) {
             best_c = c;
             best_acc = acc;
             _w = w;
             _b = b;
-        }
+        } else break;
 
-        std::cout << "Accuracy for " << c << ": " << acc << "\n";
+        std::cout << "Validation accuracy for c = " << c << ": " << acc << "\n";
     }
 
-    std::cout << "Best accuracy for " << best_c << " was " << best_acc << "\n";
+    std::cout << "Best validation accuracy for c = " << best_c << " was " << best_acc << "\n";
 
     w = _w;
     b = _b;

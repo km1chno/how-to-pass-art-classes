@@ -11,9 +11,12 @@ class Glcm {
     Eigen::MatrixXd matrix;
     int getTone(const double &pixel);
     double _informationMeasuresofCorrelation(int type);
+    vector <Eigen::MatrixXd> allMatrix;
 public:
     Glcm(int offsetx, int offsety, int n_tones);
     void computeMatrix(const vector<vector<double>> &image);
+    void computeMatrix(const Eigen::MatrixXd &imageMatrix);
+    void computeManyMatrixes(const vector<vector<double>> &image, int matrix_size);
     vector<double> getFlatMatrix();
     vector<double> getAllFeaturesFromMatrix();
     double mean();
@@ -36,5 +39,6 @@ public:
     double informationMeasuresofCorrelation2();
 };
 
+vector<vector<double>> useGlcmFeatures(const vector<vector<double>> &vt);
 
 #endif //HOW_TO_PASS_ART_CLASSES_GLCM_H

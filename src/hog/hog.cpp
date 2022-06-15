@@ -8,13 +8,12 @@
 #include <cmath>
 #include <vector>
 #include <numeric>
+#include <algorithm>
 #include <math.h>
 
 using std::vector;
 
-Hog::Hog(int _cellSize, int _blockSize, int _n_bins) : n_pixels_per_cel(_cellSize), n_cells_per_block(_blockSize), n_bins(_n_bins){
-
-}
+Hog::Hog(int _cellSize, int _blockSize, int _n_bins) : n_pixels_per_cel(_cellSize), n_cells_per_block(_blockSize), n_bins(_n_bins) {}
 
 vector<vector<double>> Hog::getHistogram(const vector<vector<double>> &image) {
     int n_rows_image = image.size();
@@ -133,6 +132,21 @@ vector<double> Hog::l2blockNormalization(const vector<vector<double>>& vec) {
             return nom / den;
         });
     return std::move(flat_vec);
+}
+
+vector<vector<double>> useHogFeatures(const vector<vector<double>> &vt) {
+    Hog hog = Hog();
+    vector<vector<double>> newVt;
+    for (const auto &vec : vt) {
+        const int sz = int(sqrt(vec.size()));
+        vector<vector<double>> image(sz);
+        for (int i = 0; i + 1 < vec.size(); ++i) {
+            image[i / sz].push_back(vec[i]);
+        }
+        auto hog_flat = hog.getFlatHistogram(image);
+        newVt.push_back(hog_flat);
+    }
+    return newVt;
 }
 
 

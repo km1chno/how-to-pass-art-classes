@@ -9,4 +9,9 @@ Ubuntu:
     sudo apt-get -y install libjpeg-dev
     ```
 
+# Create res directories 
 
+```
+chmod +x create_dirs.sh
+./create_dirs.sh
+```

@@ -3,32 +3,13 @@
 #include <bits/stdc++.h>
 #include <Eigen/Dense>
 #include "svm/svm.h"
-#include "tools.h"
 #include "pca/pca.h"
 #include "glcm/glcm.h"
 
 using namespace std;
 
-vector<vector<double>> useGlcmFeatures(const vector<vector<double>> &vt) {
-    vector<vector<double>> newVt;
-    for (const auto &vec : vt) {
-        Glcm glcm = Glcm(3, 0, 15);
-        const int sz = int(sqrt(vec.size()));
-        vector<vector<double>> image(sz);
-        for (int i = 0; i + 1 < vec.size(); ++i) {
-            image[i / sz].push_back(vec[i]);
-        }
-        glcm.computeMatrix(image);
-        auto hog_flat = glcm.getAllFeaturesFromMatrix();
-        std::cout << hog_flat[7] << " " << vec.back() << '\n';
-        hog_flat.push_back(vec.back());
-        newVt.push_back(hog_flat);
-    }
-    return newVt;
-}
-
 int main() {
-    freopen("../../res/paintings.data", "r", stdin);
+    freopen("../../res/grey_scale_paintings.csv", "r", stdin);
     srand(time(NULL));
 
     std::string input_str;
@@ -58,8 +39,8 @@ int main() {
     std::random_shuffle(A.begin(), A.end());
     std::random_shuffle(B.begin(), B.end());
 
-    double train_frac = 0.6;
-    double ver_frac = 0.2;
+    double train_frac = 0.03;
+    double ver_frac = 0;
 
     std::vector<std::vector<double> > vt, vv, vtest;
     double m1 = double(A.size());
@@ -78,15 +59,13 @@ int main() {
     b = ver_frac * m2;
     for (int i = 0; i < a; i++)
         vt.push_back(B[i]);
-
     for (int i = a; i < a+b; i++)
         vv.push_back(B[i]);
     for (int i = a+b; i < m2; i++)
         vtest.push_back(B[i]);
-
     //Eigen::MatrixXf trainmat = Eigen::MatrixXf(vt.size(), );
-
     vt = useGlcmFeatures(vt);
+    exit(0);
     vv = useGlcmFeatures(vv);
     vtest = useGlcmFeatures(vtest);
 
@@ -125,17 +104,8 @@ int main() {
     Xt *= feature_mat;
     Xv *= feature_mat;
     Xtest *= feature_mat;
-    standarizeData(Xt, Xv, Xtest);// <- makes everything worse:(
+    //standarizeData(Xt, Xv, Xtest);// <- makes everything worse:(
     LinSVM svm(Xt.cols(), Xt, Xv, yt, yv);
 
-    svm.fit(100.0, 300.0, 20);
 
-    double M = Xtest.rows();
-    double correct = 0;
-    for (int i = 0; i < M; i++) {
-        int choisenClass = svm.classify(Xtest.row(i));
-        if (choisenClass == ytest(i))
-            correct++;
-    }
-    std::cout << "accuracy on test set: " << correct/M << "\n";
 }

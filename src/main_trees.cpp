@@ -25,6 +25,27 @@ vector<vector<float>> useGlcmFeatures(const vector<vector<float>> &vt) {
         floated.push_back(vec.front());
         for (auto i : hog_flat)
             floated.push_back(i);
+        //floated = make_compression(floated);
+        newVt.push_back(floated);
+    }
+    return newVt;
+}
+
+vector<vector<float>> useHogFeatures(const vector<vector<float>> &vt) {
+    vector<vector<float>> newVt;
+    for (const auto &vec : vt) {
+        Hog hog = Hog();
+        const int sz = int(sqrt(vec.size()));
+        vector<vector<double>> image(sz);
+        for (int i = 1; i < vec.size(); ++i) {
+            image[(i - 1) / sz].push_back(vec[i - 1]);
+        }
+        auto hog_flat = hog.getFlatHistogram(image);
+        vector<float> floated;
+        floated.push_back(vec.front());
+        for (auto i : hog_flat)
+            floated.push_back(i);
+        //floated = make_compression(floated);
         newVt.push_back(floated);
     }
     return newVt;
@@ -56,21 +77,16 @@ int main() {
             v.push_back(vect);
     }
     std::cout << "readed\n";
-    std::vector<std::vector<float> > A, B;
+    std::vector<std::vector<float> > A;
     for (auto row: v)
-        if (row.front() == 0)
             A.push_back(row);
-        else
-            B.push_back(row);
     std::shuffle(A.begin(), A.end(), std::mt19937(std::random_device()()));
-    std::shuffle(B.begin(), B.end(), std::mt19937(std::random_device()()));
 
-    double train_frac = 0.001;
+    double train_frac = 0.92;
     double ver_frac = 0.0;
 
     std::vector<std::vector<float> > vt, vv, vtest;
     auto m1 = double(A.size());
-    auto m2 = double(B.size());
 
     int a = train_frac * m1;
     int b = ver_frac * m1;
@@ -81,25 +97,16 @@ int main() {
     for (int i = a + b; i < m1; i++)
         vtest.push_back(A[i]);
 
-    for (int i = a; i < a + b; i++)
-        vv.push_back(B[i]);
-    for (int i = a + b; i < m2; i++)
-        vtest.push_back(B[i]);
-
-    a = train_frac * m2;
-    b = ver_frac * m2;
-    for (int i = 0; i < a; i++)
-        vt.push_back(B[i]);
     std::cout << "startGlcmFeatures\n";
     vt = useGlcmFeatures(vt);
     std::cout << "end glcm vt\n";
     vtest = useGlcmFeatures(vtest);
     std::cout << "end glcm vtest\n";
 
-    /*auto vt2 = useHogFeatures(vt);
+    /*//auto vt2 = useHogFeatures(vt);
     std::cout << "ended hog1\n";
-    auto vtest2 = useHogFeatures(vtest);
-
+    //auto vtest2 = useHogFeatures(vtest);
+    std::cout << "ended hog2\n";
     for (auto i : vt2)
         vt.push_back(i);
     for (auto i : vtest2)
@@ -129,9 +136,9 @@ int main() {
         vtest[i].erase(vtest[i].begin());
     }
 
-    std::cout << "Training set: " << vt.size() << ", " << int(train_frac * m1) << "/" << int(train_frac * m2) << "\n";
-    std::cout << "Ver set:      " << vv.size() << ", " << int(ver_frac * m1) << "/" << int(ver_frac * m2) << "\n";
-    std::cout << "Test set:     " << vtest.size() << ", " << m1 - int(train_frac * m1) - int(ver_frac * m1) << "/" << m2 - int(train_frac * m2) - int(ver_frac * m2) << "\n";
+    std::cout << "Training set: " << vt.size() << ", " << int(train_frac * m1) << "/" <<   "\n";
+    std::cout << "Ver set:      " << vv.size() << ", " << int(ver_frac * m1) << "/" <<   "\n";
+    std::cout << "Test set:     " << vtest.size() << ", " << m1 - int(train_frac * m1) - int(ver_frac * m1) << "\n";
 
 
     int d = vt[0].size();
@@ -141,7 +148,7 @@ int main() {
 
     for (int i = 0; i < vt.size(); i++)
         for (int j = 0; j < d; j++)
-            Xt(i, j) = vt[i][j];
+            Xt(i, j) = vt[i][j+1];
 
     for (int i = 0; i < vv.size(); i++)
         for (int j = 0; j < d; j++)

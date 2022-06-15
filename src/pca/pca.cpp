@@ -14,7 +14,6 @@ Eigen::MatrixXd pcaComponents(Eigen::MatrixXd X, int components) {
 }
 
 Eigen::MatrixXd pcaFraction(Eigen::MatrixXd X, double fraction) {
-    std::cout << "pca start\n";
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(getCovarianceMatrix(std::move(X)));
     double S = es.eigenvalues().sum();
     double eigenSum = 0;
@@ -25,6 +24,5 @@ Eigen::MatrixXd pcaFraction(Eigen::MatrixXd X, double fraction) {
         if (eigenSum/S >= fraction)
             break;
     }
-    std::cout << "pca end\n";
     return es.eigenvectors().rightCols(components);
 }

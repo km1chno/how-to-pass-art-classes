@@ -39,7 +39,7 @@ public:
     }
     void fit(const Eigen::MatrixXd &X, const Eigen::VectorXd &Y);
 
-    vector<int> predict(const Eigen::MatrixXd &X);
+    vector<int> predictRows(const Eigen::MatrixXd &X);
     int predict(const Eigen::VectorXd &X);
 
 };

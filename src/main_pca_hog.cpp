@@ -11,18 +11,22 @@ using namespace std;
 
 vector<vector<float>> useHogFeatures(const vector<vector<float>> &vt) {
     Hog hog = Hog();
-    vector<vector<float>> newVt;
+    vector<vector<double>> newVt;
     for (const auto &vec : vt) {
         const int sz = int(sqrt(vec.size()));
-        vector<vector<float>> image(sz);
+        vector<vector<double>> image(sz);
         for (int i = 0; i + 1 < vec.size(); ++i) {
             image[i / sz].push_back(vec[i]);
         }
         auto hog_flat = hog.getFlatHistogram(image);
+        std::cout << hog_flat[0] << " " << vec.back() << '\n';
+        continue;
         hog_flat.push_back(vec.back());
         newVt.push_back(hog_flat);
+
     }
-    return newVt;
+    exit(0);
+    //return newVt;
 }
 
 int main() {
@@ -56,8 +60,8 @@ int main() {
     std::random_shuffle(A.begin(), A.end());
     std::random_shuffle(B.begin(), B.end());
 
-    double train_frac = 0.6;
-    double ver_frac = 0.2;
+    double train_frac = 1;
+    double ver_frac = 0;
 
     std::vector<std::vector<float> > vt, vv, vtest;
     double m1 = double(A.size());
@@ -126,14 +130,4 @@ int main() {
     standarizeData(Xt, Xv, Xtest);// <- makes everything worse:(
     LinSVM svm(Xt.cols(), Xt, Xv, yt, yv);
 
-    svm.fit(100.0, 300.0, 20);
-
-    double M = Xtest.rows();
-    double correct = 0;
-    for (int i = 0; i < M; i++) {
-        int choisenClass = svm.classify(Xtest.row(i));
-        if (choisenClass == ytest(i))
-            correct++;
-    }
-    std::cout << "accuracy on test set: " << correct/M << "\n";
 }

@@ -4,5 +4,5 @@ main
 *NEW.jpg
 *_Representation
 .idea
-res
-res/**
+AugmentedDataset
+GreyScaleDataset

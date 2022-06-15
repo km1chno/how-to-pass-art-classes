@@ -12,11 +12,39 @@ Glcm::Glcm(int _offsetx, int _offsety, int _n_tones) :
     this->bin_width = max_pixel_value / n_tones + 1;
 }
 
+void Glcm::computeManyMatrixes(const vector<vector<double>> &image, int matrix_size) {
+    int img_rows = image.size();
+    int img_cols = image[0].size();
+    Eigen::MatrixXd imageMatrix(img_rows, img_cols);
+    for (int i = 0; i < img_rows; ++i)
+        for (int j = 0; j < img_cols; ++j)
+            imageMatrix(i, j) = image[i][j];
+
+    for (int i = 0; i < img_rows; i += matrix_size)
+        for (int j = 0; j < img_cols; j += matrix_size) {
+            //std::cout << i << " MATRIX " << j << " " << matrix_size << " " << n_rows << " " << n_cols << '\n';
+            int width = std::min(matrix_size, img_rows - i);
+            int height = std::min(matrix_size, img_cols - j);
+            Eigen::MatrixXd inputImage = imageMatrix.block(i, j, width, height);
+            computeMatrix(inputImage);
+            allMatrix.push_back(matrix);
+        }
+}
+
 void Glcm::computeMatrix(const vector<vector<double>> &image) {
     this->n_rows = image.size();
     this->n_cols = image[0].size();
-    this->matrix = Eigen::MatrixXd(n_tones, n_tones);
+    Eigen::MatrixXd imageMatrix(n_rows, n_cols);
+    for (int i = 0; i < n_rows; ++i)
+        for (int j = 0; j < n_cols; ++j)
+            imageMatrix(i, j) = image[i][j];
+    computeMatrix(imageMatrix);
+}
 
+void Glcm::computeMatrix(const Eigen::MatrixXd &imageMatrix) {
+    this->matrix = Eigen::MatrixXd(n_tones, n_tones);
+    this->n_rows = imageMatrix.rows();
+    this->n_cols = imageMatrix.cols();
     if (n_rows == 0) {
         throw "getHistogram: image is empty";
     }
@@ -31,8 +59,8 @@ void Glcm::computeMatrix(const vector<vector<double>> &image) {
             int x = r + offsetx;
             int y = c + offsety;
             if (x >= 0 && y >= 0 && x < n_rows && y < n_cols) {
-                int first_tone = getTone(image[r][c]);
-                int second_tone = getTone(image[x][y]);
+                int first_tone = getTone(imageMatrix(r, c));
+                int second_tone = getTone(imageMatrix(x, y));
                 ++matrix(first_tone, second_tone);
                 ++matrix(second_tone, first_tone);
                 count += 2;
@@ -284,26 +312,88 @@ double Glcm::diffEntropy() {
 
 vector<double> Glcm::getAllFeaturesFromMatrix() {
     vector<double> features;
-    features.push_back(mean());
-    features.push_back(std());
-    features.push_back(contrast());
-    features.push_back(dissimilarity());
-    features.push_back(homogeneity());
-    features.push_back(ASM());
-    features.push_back(energy());
-    features.push_back(max());
-    features.push_back(correlation());
-    features.push_back(variance());
-    features.push_back(inverseDifferenceMoment());
-    features.push_back(sumAverage());
-    features.push_back(entropy());
-    features.push_back(sumEntropy());
-    features.push_back(diffVariance());
-    features.push_back(diffEntropy());
-    features.push_back(informationMeasuresofCorrelation1());
-    features.push_back(informationMeasuresofCorrelation2());
+    for (const auto &i : allMatrix) {
+        n_rows = i.rows();
+        n_cols = i.cols();
+        matrix = i;
+        features.push_back(mean());
+        features.push_back(std());
+        features.push_back(contrast());
+        features.push_back(dissimilarity());
+        features.push_back(homogeneity());
+        features.push_back(ASM());
+        features.push_back(energy());
+        features.push_back(max());
+        features.push_back(correlation());
+        features.push_back(variance());
+        features.push_back(inverseDifferenceMoment());
+        features.push_back(sumAverage());
+        features.push_back(entropy());
+        features.push_back(sumEntropy());
+        features.push_back(diffVariance());
+        features.push_back(diffEntropy());
+        features.push_back(informationMeasuresofCorrelation1());
+        features.push_back(informationMeasuresofCorrelation2());
+    }
+    int oldFeatSize = features.size();
+    for (int i = 0; i < 18; ++i) {
+        double min = 1e9, max = -1e9, sum = 0;
+        for (int j = i; j < oldFeatSize; ++j) {
+            sum += features[j];
+            min = std::min(min, features[j]);
+            max = std::max(max, features[j]);
+        }
+        features.push_back(sum);
+        features.push_back(min);
+        features.push_back(max);
+        features.push_back(sum / max);
+    }
     //for (auto i : features) std::cout << i << " ";
 //    std::cout << '\n';
     return features;
+}
+
+vector<vector<double>> useGlcmFeatures(const vector<vector<double>> &vt) {
+    vector<vector<double>> newVt;
+    for (const auto &vec : vt) {
+
+        const int sz = int(sqrt(vec.size()));
+        vector<vector<double>> image(sz);
+        for (int i = 1; i < vec.size(); ++i) {
+            image[(i-1) / sz].push_back(vec[i - 1]);
+        }
+        Glcm glcm = Glcm(2, 0, 7);
+        Glcm glcm2 = Glcm(0, 2, 7);
+        Glcm glcm3 = Glcm(2, 2, 7);
+
+        glcm.computeManyMatrixes(image, 100);
+        glcm.computeManyMatrixes(image, 50);
+        //glcm.computeManyMatrixes(image, 25);
+        //glcm.computeManyMatrixes(image, 5); /// MUCH MORE SLOW, AND CAN BE EVEN USELESS
+
+        glcm2.computeManyMatrixes(image, 100);
+        glcm2.computeManyMatrixes(image, 50);
+        //glcm2.computeManyMatrixes(image, 25);
+        //glcm2.computeManyMatrixes(image, 5); /// MUCH MORE SLOW, AND CAN BE EVEN USELESS
+
+        glcm3.computeManyMatrixes(image, 100);
+        glcm3.computeManyMatrixes(image, 50);
+        //glcm3.computeManyMatrixes(image, 25);
+        //glcm3.computeManyMatrixes(image, 5); /// MUCH MORE SLOW, AND CAN BE EVEN USELESS
+
+        auto glcm_flat = glcm.getAllFeaturesFromMatrix();
+        auto glcm_flat2 = glcm2.getAllFeaturesFromMatrix();
+        auto glcm_flat3 = glcm3.getAllFeaturesFromMatrix();
+        glcm_flat.insert(glcm_flat.end(), glcm_flat.begin(), glcm_flat.end());
+        for (int i = 0; i < glcm_flat2.size(); ++i)
+            glcm_flat[i] += glcm_flat2[i];// + glcm_flat3[i];
+
+        glcm_flat.insert(glcm_flat.end(), glcm_flat2.begin(), glcm_flat2.end());
+        glcm_flat.insert(glcm_flat.end(), glcm_flat3.begin(), glcm_flat3.end());
+        //std::cout << glcm_flat.size() << '\n';
+        //std::cout << glcm_flat[0] << " " << vec[0] << '\n';
+        newVt.push_back(glcm_flat);
+    }
+    return newVt;
 }
 

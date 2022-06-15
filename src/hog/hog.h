@@ -20,8 +20,8 @@ public:
 
     vector<vector<double>> getHistogram(const vector<vector<double>> &image);
     vector<double> getFlatHistogram(const vector<vector<double>> &image);
-
 };
 
+vector<vector<double>> useHogFeatures(const vector<vector<double>> &vt);
 
 #endif //HOW_TO_PASS_ART_CLASSES_HOG_H
